@@ -1,0 +1,62 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/adminheader.ejs %>
+
+<% if (messages.error) { %>
+	<p style="color:red"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+	<p style="color:green"><%- messages.success %></p>
+<% } %>	
+
+<table width='50%' border=1 style="border-collapse: collapse;">
+
+	<tr style='text-align:left; background-color:#ffbf80'; height=50px>
+		<th>No</th>
+		<th>Date</th>
+		<th>Description</th>
+		<th>Team1</th>
+		<th>Team2</th>		
+		<th>Venue</th>
+		<th>Freezed?</th>
+		<th>Winner</th>
+		<th>Update Results</th>		
+	</tr>	
+	<% if (data) { %>
+	<% data.forEach(function(bpl_match){ %>
+		<tr style=nth-child(even){background-color: #4CAF50;}>
+			<td><%= bpl_match.id %></td>
+			<td><%= bpl_match.date %></td>
+			<td><%= bpl_match.description %></td>
+			<td><%= bpl_match.team1 %></td>
+			<td><%= bpl_match.team2 %></td>			
+			<td><%= bpl_match.venue %></td>
+			<td><%= bpl_match.freezed %></td>
+			<td><%= bpl_match.result %></td>
+			<td>			
+				<form role="form" id="updateMatchResults" action="/admin/update/<%= bpl_match.id %>" method="POST">
+					<div class="form-group" id="gender">
+						<label class="radio-inline"><input type="radio" name="optradio" checked="checked" value="">No Result</label>
+						<label class="radio-inline"><input type="radio" name="optradio" value=<%=bpl_match.team1 %>><%=bpl_match.team1 %></label>
+						<label class="radio-inline"><input type="radio" name="optradio" value="TIE">Tie</label>
+						<label class="radio-inline"><input type="radio" name="optradio" value=<%=bpl_match.team2 %>><%=bpl_match.team2 %></label>
+					</div>
+					<div class="form-group" id="freezer">
+					<input id="freeze" type="checkbox" name="freeze">Freeze?</>
+					<input type="submit" class="btn btn-success"/>
+
+					</div>
+					
+				</form>
+			</td>
+		</tr>
+	<% }) %>
+	<% } %>
+</table>
+
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>

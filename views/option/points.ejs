@@ -1,0 +1,92 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/header.ejs %>
+
+<% if (messages.error) { %>
+	<p style="color:red"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+	<p style="color:green"><%- messages.success %></p>
+<% } %>	
+
+<table width='40%' border=1 style="border-collapse: collapse;">
+
+	<tr style='text-align:left; background-color:#ff9999'; height=50px>
+		<th>Name</th>
+		<th>Total</th>
+		<% for(var i=1; i<57; i++) {%>
+			<th>M<%= i %></th>
+		<% } %>	
+	</tr>	
+	<% if (data) { %>
+	<% data.forEach(function(bpl_points){ %>
+		<tr>
+			<td><%= bpl_points.name %></td>
+			<td><%= bpl_points.total %></td>
+			<td><%= bpl_points.m1 %></td>
+			<td><%= bpl_points.m2 %></td>
+			<td><%= bpl_points.m3 %></td>
+			<td><%= bpl_points.m4 %></td>
+			<td><%= bpl_points.m5 %></td>
+			<td><%= bpl_points.m6 %></td>
+			<td><%= bpl_points.m7 %></td>
+			<td><%= bpl_points.m8 %></td>
+			<td><%= bpl_points.m9 %></td>
+			<td><%= bpl_points.m10 %></td>
+			<td><%= bpl_points.m11 %></td>
+			<td><%= bpl_points.m12 %></td>
+			<td><%= bpl_points.m13 %></td>
+			<td><%= bpl_points.m14 %></td>
+			<td><%= bpl_points.m15 %></td>
+			<td><%= bpl_points.m16 %></td>
+			<td><%= bpl_points.m17 %></td>
+			<td><%= bpl_points.m18 %></td>
+			<td><%= bpl_points.m19 %></td>
+			<td><%= bpl_points.m20 %></td>
+			<td><%= bpl_points.m21 %></td>
+			<td><%= bpl_points.m22 %></td>
+			<td><%= bpl_points.m23 %></td>
+			<td><%= bpl_points.m24 %></td>
+			<td><%= bpl_points.m25 %></td>
+			<td><%= bpl_points.m26 %></td>
+			<td><%= bpl_points.m27 %></td>
+			<td><%= bpl_points.m28 %></td>
+			<td><%= bpl_points.m29 %></td>
+			<td><%= bpl_points.m30 %></td>
+			<td><%= bpl_points.m31 %></td>
+			<td><%= bpl_points.m32 %></td>
+			<td><%= bpl_points.m33 %></td>
+			<td><%= bpl_points.m34 %></td>
+			<td><%= bpl_points.m35 %></td>
+			<td><%= bpl_points.m36 %></td>
+			<td><%= bpl_points.m37 %></td>
+			<td><%= bpl_points.m38 %></td>
+			<td><%= bpl_points.m39 %></td>
+			<td><%= bpl_points.m40 %></td>
+			<td><%= bpl_points.m41 %></td>
+			<td><%= bpl_points.m42 %></td>
+			<td><%= bpl_points.m43 %></td>
+			<td><%= bpl_points.m44 %></td>
+			<td><%= bpl_points.m45 %></td>
+			<td><%= bpl_points.m46 %></td>
+			<td><%= bpl_points.m47 %></td>
+			<td><%= bpl_points.m48 %></td>
+			<td><%= bpl_points.m49 %></td>
+			<td><%= bpl_points.m50 %></td>
+			<td><%= bpl_points.m51 %></td>
+			<td><%= bpl_points.m52 %></td>
+			<td><%= bpl_points.m53 %></td>
+			<td><%= bpl_points.m54 %></td>
+			<td><%= bpl_points.m55 %></td>
+			<td><%= bpl_points.m56 %></td>
+		</tr>
+	<% }) %>
+	<% } %>
+</table>
+
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>

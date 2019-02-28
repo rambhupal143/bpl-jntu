@@ -1,0 +1,39 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/adminheader.ejs %>
+
+<% if (messages.error) { %>
+	<p style="color:red"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+	<p style="color:green"><%- messages.success %></p>
+<% } %>	
+
+<table width='50%' border=1 style="border-collapse: collapse;">
+
+	<tr style='text-align:left; background-color:#ffbf80'; height=50px>
+		<th>Name</th>
+		<th>User ID</th>
+		<th>Password</th>		
+		<th>Email</th>
+		<th>Mobile</th>	
+	</tr>	
+	<% if (data) { %>
+	<% data.forEach(function(bpl_user){ %>
+		<tr style=nth-child(even){background-color: #4CAF50;}>
+			<td><%= bpl_user.name %></td>
+			<td><%= bpl_user.user_id %></td>
+			<td><%= bpl_user.password %></td>
+			<td><%= bpl_user.email %></td>
+			<td><%= bpl_user.phone %></td>
+		</tr>
+	<% }) %>
+	<% } %>
+</table>
+
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>
