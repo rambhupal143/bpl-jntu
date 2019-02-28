@@ -63,7 +63,7 @@ app.use(function(err, req, res, next) {
 });
 
 var debug = require('debug')('passport-oracle:server');
-var http = require('http');
+//var http = require('http');
 var oracledb = require('oracledb');
 var log4js = require('log4js');
 log4js.configure('./config/log4js.json');
