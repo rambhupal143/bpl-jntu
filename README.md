@@ -1,11 +1,13 @@
 # bpl-jntu
-bpl with oracle db
-#--------------------------------------------------------------
+BPL
+--------------------------------------------------------------
 Developers  : 	Rambhupal Kottam
-				Madhan P
-Date		:	28 Feb 2019			
-#--------------------------------------------------------------
+		Madhan P
+Date	    :	28 Feb 2019			
+--------------------------------------------------------------
 
+Project: 
+	Node.js, Express JS (EJs) with Oracle DB
 
 Installation steps:
 
