@@ -42,7 +42,7 @@ module.exports = function(app,passport) {
 	// SHOW LIST OF MATCHES
 	app.get('/options', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
-		var selectSQL = "SELECT id, match_date,team1, team2,result description, venue, freezed FROM bpl_matches order by id";
+		var selectSQL = "SELECT id, match_date,team1, team2,result, description, venue, freezed FROM bpl_matches order by id";
 		var param = [];
 		console.log(req.session.user_id);
 		//param.push(anyVal);
@@ -58,7 +58,7 @@ module.exports = function(app,passport) {
 					return done(err);
 				} 
 				else {
-					console.log(result.rows.length)
+					console.log(result.rows)
 					//if (result.rows.length) {
 						db.doRelease(connection);
 						console.log('GOT Something')
@@ -77,7 +77,7 @@ module.exports = function(app,passport) {
 						//}	
 					//}
 					
-					return done(null, result.rows);
+					//return done(null, result.rows);
 				}
 			});
 	

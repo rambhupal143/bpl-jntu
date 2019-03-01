@@ -23,16 +23,16 @@ including header content which is common for all pages
 	<% if (data) { %>
 	<% data.forEach(function(bpl_match){ %>
 		<tr>
-			<td><%= bpl_match.id %></td>
-			<td><%= bpl_match.date %></td>
-			<td><%= bpl_match.description %></td>
-			<td><%= bpl_match.venue %></td>
-			<%if (bpl_match.freezed != "Y") { %>
+			<td><%= bpl_match.ID %></td>
+			<td><%= bpl_match.MATCH_DATA %></td>
+			<td><%= bpl_match.DESCRIPTION %></td>
+			<td><%= bpl_match.VENUE %></td>
+			<%if (bpl_match.FREEZED != "Y") { %>
 				<td>				
 					<form role="form" id="createAccountForm" action="/options/update/<%= bpl_match.id %>" method="POST">
 						<div class="form-group" id="gender">
-							<label class="radio-inline"><input type="radio" name="optradio" checked="checked" value=<%=bpl_match.team1 %>><%=bpl_match.team1 %></label>
-							<label class="radio-inline"><input type="radio" name="optradio" value=<%=bpl_match.team2 %>><%=bpl_match.team2 %></label>
+							<label class="radio-inline"><input type="radio" name="optradio" checked="checked" value=<%=bpl_match.TEAM1 %>><%=bpl_match.TEAM1 %></label>
+							<label class="radio-inline"><input type="radio" name="optradio" value=<%=bpl_match.TEAM2 %>><%=bpl_match.TEAM2 %></label>
 							<div>
 						<input type="submit" class="btn btn-success"/>
 						</div>
@@ -41,7 +41,7 @@ including header content which is common for all pages
 					</form>
 				</td>
 			<% } else{ %>
-			   <td><%= bpl_match.result %></td>	
+			   <td><%= bpl_match.RESULT %></td>	
 			<% } %>
 			<!--<% if (admin == 'Y') { %>
 				<input type="submit" value="Admin" />
