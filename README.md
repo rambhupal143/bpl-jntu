@@ -15,11 +15,12 @@ Installation steps:
 2. Install oracle client (I used 12c) and configure tnsnames for the oracle db
 	open cmd --> type 'netca' --> Local Net Service configuration
 2. create a directory (Eg: C:\bpl)
-3. Open cmd and run the below,
-	npm install  
-	This comamnd will ensure installing all the dependency modules.
 	
-4. Copy/Replace the git directories under above acreated folder 
+3. Copy/Replace the git directories under above acreated folder 
+
+4. Open cmd in the same directory and run npm install
+
+	This comamnd will ensure installing all the dependency modules.
 5. 	Modify the below config files as needed,
 	\bpl-jntu\config
 		dbconfig.js --> Oracle DB config
