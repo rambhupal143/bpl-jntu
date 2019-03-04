@@ -16,21 +16,9 @@ Installation steps:
 	open cmd --> type 'netca' --> Local Net Service configuration
 2. create a directory (Eg: C:\bpl)
 3. Open cmd and run the below,
-	npm install
-	npm install ejs
-	npm install express
-	npm install express-session
-	npm install path
-	npm install serve-favicon
-	npm install morgan
-	npm install cookie-parser
-	npm install body-parser
-	npm install passport
-	npm install connect-flash
-	npm install oracledb
-	npm install log4js
-	npm install debug
-	npm install messages
+	npm install  
+	This comamnd will ensure installing all the dependency modules.
+	
 4. Copy/Replace the git directories under above acreated folder 
 5. 	Modify the below config files as needed,
 	\bpl-jntu\config
