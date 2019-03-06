@@ -24,7 +24,7 @@ module.exports = function(passport) {
 						db.doRelease(connection);
 						done(err,null);
 					} else {
-						LOGGER.debug('GOT RESULT');
+						//LOGGER.debug('GOT RESULT');
 						db.doRelease(connection);
 						done(null,result.rows[0]);
 					}
@@ -95,11 +95,11 @@ module.exports = function(passport) {
         },
 			function(req, username, password, done) {
 				//console.log('local-login');
-				var selectSQL = "SELECT USER_ID,NAME,PASSWORD,ADMIN FROM BPL_USERS WHERE user_id =:username ";
+				var selectSQL = "SELECT USER_ID,NAME,PASSWORD,ADMIN FROM BPL_USERS WHERE user_id =:username1 ";
 				var param = [];
 				//console.log(db);
 				//param.push(username.toUpperCase());
-				param.push('431');
+				param.push(username);
 				db.doConnect(function(err, connection){  
 					if (err) {
 						console.log('error connection');
@@ -126,9 +126,9 @@ module.exports = function(passport) {
 							
 							//req.session.user_id = username
 							req.session.user_id = '431'
-							console.log(result.rows[0])
+							//console.log(result.rows[0])
 							req.session.admin = result.rows[0][3]
-							console.log(req.session.admin)
+							//console.log(req.session.admin)
 							return done(null, result.rows[0]);
 						}
 					});

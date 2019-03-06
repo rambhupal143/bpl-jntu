@@ -44,6 +44,7 @@ module.exports = function(pool) {
 
   
   var doExecute = function(connection, sql, params, callback) {
+	//console.log(sql, "---", params)
     connection.execute(sql, params, { autoCommit: true}, function(err, result) {
       
       if (err) {

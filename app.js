@@ -48,6 +48,13 @@ require('./routes/options')(app, passport);
 require('./routes/admin')(app, passport);
 
 
+app.use(require('connect-flash')());
+app.use(function(req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
+
+
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;

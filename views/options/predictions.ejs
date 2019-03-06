@@ -1,0 +1,88 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/header.ejs %>
+
+<% if (messages.error) { %>
+	<p style="color:red"><%- messages.error %></p>
+<% } %>
+
+<% if (messages.success) { %>
+	<p style="color:green"><%- messages.success %></p>
+<% } %>	
+
+<table width='40%' border=1 style="border-collapse: collapse;">
+
+	<tr style='text-align:left; background-color:#bb99ff'; height=50px>
+		<th>Name</th>
+		<% for(var i=1; i<57; i++) {%>
+			<th>M<%= i %></th>
+		<% } %>	
+	</tr>	
+	<% if (data) { %>
+	<% data.forEach(function(bpl_prediction){ %>
+		<tr>
+			<td><%= bpl_prediction.NAME %></td>
+			<td><%= bpl_prediction.M1 %></td>
+			<td><%= bpl_prediction.M2 %></td>
+			<td><%= bpl_prediction.M3 %></td>
+			<td><%= bpl_prediction.M4 %></td>
+			<td><%= bpl_prediction.M5 %></td>
+			<td><%= bpl_prediction.M6 %></td>
+			<td><%= bpl_prediction.M7 %></td>
+			<td><%= bpl_prediction.M8 %></td>
+			<td><%= bpl_prediction.M9 %></td>
+			<td><%= bpl_prediction.M10 %></td>
+			<td><%= bpl_prediction.M11 %></td>
+			<td><%= bpl_prediction.M12 %></td>
+			<td><%= bpl_prediction.M13 %></td>
+			<td><%= bpl_prediction.M14 %></td>
+			<td><%= bpl_prediction.M15 %></td>
+			<td><%= bpl_prediction.M16 %></td>
+			<td><%= bpl_prediction.M17 %></td>
+			<td><%= bpl_prediction.M18 %></td>
+			<td><%= bpl_prediction.M19 %></td>
+			<td><%= bpl_prediction.M20 %></td>
+			<td><%= bpl_prediction.M21 %></td>
+			<td><%= bpl_prediction.M22 %></td>
+			<td><%= bpl_prediction.M23 %></td>
+			<td><%= bpl_prediction.M24 %></td>
+			<td><%= bpl_prediction.M25 %></td>
+			<td><%= bpl_prediction.M26 %></td>
+			<td><%= bpl_prediction.M27 %></td>
+			<td><%= bpl_prediction.M28 %></td>
+			<td><%= bpl_prediction.M29 %></td>
+			<td><%= bpl_prediction.M30 %></td>
+			<td><%= bpl_prediction.M31 %></td>
+			<td><%= bpl_prediction.M32 %></td>
+			<td><%= bpl_prediction.M33 %></td>
+			<td><%= bpl_prediction.M34 %></td>
+			<td><%= bpl_prediction.M35 %></td>
+			<td><%= bpl_prediction.M36 %></td>
+			<td><%= bpl_prediction.M37 %></td>
+			<td><%= bpl_prediction.M38 %></td>
+			<td><%= bpl_prediction.M39 %></td>
+			<td><%= bpl_prediction.M40 %></td>
+			<td><%= bpl_prediction.M41 %></td>
+			<td><%= bpl_prediction.M42 %></td>
+			<td><%= bpl_prediction.M43 %></td>
+			<td><%= bpl_prediction.M44 %></td>
+			<td><%= bpl_prediction.M45 %></td>
+			<td><%= bpl_prediction.M46 %></td>
+			<td><%= bpl_prediction.M47 %></td>
+			<td><%= bpl_prediction.M48 %></td>
+			<td><%= bpl_prediction.M49 %></td>
+			<td><%= bpl_prediction.M50 %></td>
+			<td><%= bpl_prediction.M51 %></td>
+			<td><%= bpl_prediction.M52 %></td>
+			<td><%= bpl_prediction.M53 %></td>
+			<td><%= bpl_prediction.M54 %></td>
+			<td><%= bpl_prediction.M55 %></td>
+			<td><%= bpl_prediction.M56 %></td>
+		</tr>
+	<% }) %>
+	<% } %>
+</table>
+
+<!--including footer content which is common for all pages-->
+<%- include ../layouts/footer.ejs %>

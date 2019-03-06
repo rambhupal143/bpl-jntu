@@ -11,7 +11,7 @@ including header content which is common for all pages
 	<p style="color:green"><%- messages.success %></p>
 <% } %>	
 
-<table width='40%' border=1 style="border-collapse: collapse;">
+<table width='80%' border=1 style="border-collapse: collapse;">
 
 	<tr style='text-align:left; background-color:#92a8d1'; height=50px>
 		<th>Match No</th>
@@ -24,18 +24,17 @@ including header content which is common for all pages
 	<% data.forEach(function(bpl_match){ %>
 		<tr>
 			<td><%= bpl_match.ID %></td>
-			<td><%= bpl_match.MATCH_DATA %></td>
+			<td><%= bpl_match.MATCH_DATE %></td>
 			<td><%= bpl_match.DESCRIPTION %></td>
 			<td><%= bpl_match.VENUE %></td>
 			<%if (bpl_match.FREEZED != "Y") { %>
 				<td>				
-					<form role="form" id="createAccountForm" action="/options/update/<%= bpl_match.id %>" method="POST">
+					<form role="form" id="createAccountForm" action="/options/update/<%= bpl_match.ID %>" method="POST">
 						<div class="form-group" id="gender">
 							<label class="radio-inline"><input type="radio" name="optradio" checked="checked" value=<%=bpl_match.TEAM1 %>><%=bpl_match.TEAM1 %></label>
 							<label class="radio-inline"><input type="radio" name="optradio" value=<%=bpl_match.TEAM2 %>><%=bpl_match.TEAM2 %></label>
-							<div>
-						<input type="submit" class="btn btn-success"/>
-						</div>
+							<input type="submit" class="btn btn-success"/>
+							
 						</div>
 						
 					</form>
