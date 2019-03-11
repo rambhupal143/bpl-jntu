@@ -21,6 +21,7 @@
     "messages": "0.0.0",
     "morgan": "^1.9.1",
     "nib": "^1.1.2",
+    "node-cricapi": "^1.2.6",
     "nodemon": "^1.18.10",
     "oracledb": "^3.1.2",
     "passport": "^0.4.0",
