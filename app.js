@@ -43,7 +43,7 @@ app.use(passport.session());
 app.use(flash());
 
 //var index = require('./routes/index');
-require('./routes/signup')(app, passport);
+require('./routes/logon')(app, passport);
 require('./routes/options')(app, passport);
 require('./routes/admin')(app, passport);
 
