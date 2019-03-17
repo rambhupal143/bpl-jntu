@@ -125,7 +125,7 @@ module.exports = function(passport) {
 								}
 							
 							//req.session.user_id = username
-							req.session.user_id = '431'
+							req.session.user_id = username
 							//console.log(result.rows[0])
 							req.session.admin = result.rows[0][3]
 							//console.log(req.session.admin)

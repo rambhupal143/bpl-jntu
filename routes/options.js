@@ -46,16 +46,16 @@ module.exports = function(app,passport) {
 	})	
 	
 	// Update the prediction for winner
-	app.post('/options/update/(:id)', isLoggedIn, function(req, res, done) {
+	app.post('/options/update_old/(:id)', isLoggedIn, function(req, res, done) {
 		
 		//console.log("hello")
 		var selTeam = req.body.optradio
 		var matchNo = req.params.id
 		var userID = req.session.user_id
 		
-		var columnName = 'M' + matchNo		
-		var updareQuery = "UPDATE bpl_options SET " + columnName + " = :selTeam WHERE user_id = :userID";
-		var params = [selTeam,userID]
+		//var columnName = 'M' + matchNo		
+		var updareQuery = "UPDATE bpl_options SET TEAM_NAME = :selTeam WHERE user_id = :userID AND match_id = :matchNo";
+		var params = [selTeam,userID,matchNo]
 		//console.log(updareQuery, " ", selTeam, " ",columnName, " ", userID)
 		//params.push(anyVal);
 		db.doConnect(function(err, connection){ 
@@ -83,12 +83,88 @@ module.exports = function(app,passport) {
 		});	
 	})
 
+	
+	app.post('/options/update/(:id)', isLoggedIn, function(req, res, done) {
+		
+		//console.log("hello")
+		var selTeam = req.body.optradio
+		var matchNo = req.params.id
+		var userID = req.session.user_id
+		
+		//var columnName = 'M' + matchNo		
+		//var updareQuery = "UPDATE bpl_options SET TEAM_NAME = :selTeam WHERE user_id = :userID AND match_id = :matchNo";
+		//var params = [selTeam,userID,matchNo]
+		var selectSQL = "SELECT * FROM bpl_options WHERE user_id =:username AND match_id = :matchNo";
+		var param = [userID,matchNo];
+		//param.push(username.toUpperCase());
+		db.doConnect(function(err, connection){  
+			if (err) {
+				return done(err);
+			}
+			db.doExecute(connection, selectSQL,param,function(err, result) {
+				if (err) {
+					db.doRelease(connection);
+					return done(err);
+				} 
+				else {
+					if (result.rows.length) {
+						//db.doRelease(connection);
+						console.log('RECORD EXISTS');
+						var updareQuery = "UPDATE bpl_options SET TEAM_NAME = :selTeam WHERE user_id = :userID AND match_id = :matchNo";
+						var paramNew = [selTeam,userID,matchNo];
+						db.doExecute(connection, updareQuery, paramNew, function(err, result) {
+							if (err) {
+								console.log('Bad error');					
+								res.redirect('/options');
+								db.doRelease(connection);
+								return done(err);
+							} 
+							else {
+								//console.log(result.rows)					
+								db.doRelease(connection);					
+								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
+								console.log(msg)
+								req.flash('success', msg);
+								res.redirect('/options');
+							}
+						});
+						
+						//return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+					} else {
+						console.log('RECORD NOT FOUND AND GOING TO INSERT');
+						
+						var bindParam = [userID,matchNo,selTeam];						
+						var insertQuery = "INSERT INTO BPL_OPTIONS (user_id,match_id,team_name) values(:userID,:matchNo,:selTeam)";
+						db.doExecute(connection,insertQuery,bindParam,function(err, insResult) {
+							if (err) {
+								db.doRelease(connection);
+								return done(err);
+							} else {
+								LOGGER.debug('INSERTION RESULT:'+JSON.stringify(insResult));
+								db.doRelease(connection);
+								//return done(null,false, req.flash('signupMessage', 'Signed up Successfully!'));
+								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
+								console.log(msg)
+								req.flash('success', msg);
+								res.redirect('/options');
+							}
+						});
+					}
+				}
+			});
+		
+		});         
+	})
+	
+	
+	
+	
 	// Show the current choice of predictions
 	app.get('/options/predictions', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
-		var selectSQL = "SELECT * FROM bpl_predictions_vw";
+		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW";
 		var param = [];
-		console.log(req.session.user_id);
+		//console.log(req.session.user_id);
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
 			if (err) {
@@ -107,7 +183,7 @@ module.exports = function(app,passport) {
 					res.render('options/predictions', {
 						title: 'Current Predictions', 
 						data: result.rows,
-						admin: isAdmin,
+						admin: "N",
 						messages:{}						
 					})
 				}
@@ -184,7 +260,7 @@ module.exports = function(app,passport) {
 	//Show champion predictions
 	app.get('/options/points', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
-		var selectSQL = "SELECT * FROM bpl_points_summary_vw";
+		var selectSQL = "SELECT * FROM BPL_FINAL_POINTS_SUMMARY_VW";
 		var param = [];		
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
@@ -204,7 +280,7 @@ module.exports = function(app,passport) {
 					res.render('options/points', {
 						title: 'Points Summary', 
 						data: result.rows,
-						admin: isAdmin,
+						admin: "N",
 						messages:{}						
 					})
 				}
