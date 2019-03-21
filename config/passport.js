@@ -119,10 +119,10 @@ module.exports = function(passport) {
 							//Bhupal: For now no encyption
 							//if (md5(password) != result.rows[0][2]) {							
 								
-								if (password != result.rows[0][2]) {
+							if (password != result.rows[0][2]) {
 								console.log('wrong password');
-								//return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-								}
+								return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+							}
 							
 							//req.session.user_id = username
 							req.session.user_id = username
