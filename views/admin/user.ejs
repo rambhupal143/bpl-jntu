@@ -23,11 +23,11 @@ including header content which is common for all pages
 	<% if (data) { %>
 	<% data.forEach(function(bpl_user){ %>
 		<tr style=nth-child(even){background-color: #4CAF50;}>
-			<td><%= bpl_user.name %></td>
-			<td><%= bpl_user.user_id %></td>
-			<td><%= bpl_user.password %></td>
-			<td><%= bpl_user.email %></td>
-			<td><%= bpl_user.phone %></td>
+			<td><%= bpl_user.NAME %></td>
+			<td><%= bpl_user.USER_ID %></td>
+			<td><%= bpl_user.PASSWORD %></td>
+			<td><%= bpl_user.EMAIL %></td>
+			<td><%= bpl_user.PHONE %></td>
 		</tr>
 	<% }) %>
 	<% } %>

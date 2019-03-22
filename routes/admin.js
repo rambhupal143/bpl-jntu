@@ -3,8 +3,7 @@
 //var app = express()
 
 module.exports = function(app,passport) {	
-	
-	app.post('/admin/update/(:id)', isLoggedIn, function(req, res, next) {
+	app.post('/admin/update/(:id)', isLoggedIn, function(req, res, done) {
 		//res.send(req.body.optradio);
 		//console.log("Hello")
 		var isAdmin = req.session.admin
@@ -22,92 +21,114 @@ module.exports = function(app,passport) {
 				result: selTeam,
 				freezed: freezeVal
 			}
-			var update_sql = 'update bpl_matches SET ? where id = '+matchNo;
-			//updareQuery = "UPDATE bpl_matches SET " + result + "=" + "'" + selTeam + "'" + " WHERE id = " + userID
-			console.log(req.body)
-				
-			req.getConnection(function(error, conn) {
-				conn.query(update_sql,match, function(err, result) {
-					//if(err) throw err
-					if (err) {
-						req.flash('error', err)
-						
-						// render to views/user/add.ejs
-						res.redirect('/admin')
-					} else {
-						var msg = "Successfully updated Match No:" + matchNo + " with " + selTeam + " and Freezed to " + freezeVal;
-						req.flash('success', msg)
-						// render to views/user/add.ejs
-						res.redirect('/admin')
-					}
-				})
-			 })
-		} else {
-			res.redirect("/Options")
-		}
+			var updareQuery = 'update bpl_matches SET ? where id = ' + matchNo;
+			var params = [matchNo]
+			
+			db.doConnect(function(err, connection){ 
+			if (err) {
+				console.log('error connection');
+				return done(err);
+			}
+			db.doExecute(connection, updareQuery, params, function(err, result) {
+				if (err) {
+					console.log('Bad error');
+					db.doRelease(connection);
+					res.redirect('/admin')					
+					return done(err);
+				} 
+				else {
+					//console.log(result.rows)					
+					db.doRelease(connection);					
+					var msg = "Bingo! Successfully updated Match No:" + matchNo + " with " + selTeam + " and Freezed to " + freezeVal;
+					console.log(msg)
+					req.flash('success', msg);
+					res.redirect('/admin');
+				}
+			});
+	
+		});
 	})
 
 	// SHOW LIST OF MATCHES
-	app.get('/admin', isLoggedIn, function(req, res, next) {
-		req.getConnection(function(error, conn) {
-			conn.query('SELECT * FROM bpl_matches ORDER BY id',function(err, rows, fields) {
-				//if(err) throw err
-				var isAdmin = req.session.admin
-				if (isAdmin == 'Y') {					
-					if (err) {
-						req.flash('error', err)
+	app.get('/admin', isLoggedIn, function(req, res, done) {
+		var selectSQL = "SELECT * FROM bpl_matches ORDER BY id";
+		var param = [];
+		var isAdmin = req.session.admin;
+		
+		db.doConnect(function(err, connection){ 
+			if (err) {
+				console.log('error connection');
+				return done(err);
+			}
+			db.doSelect(connection, selectSQL,param,function(err, result) {
+				if (err) {
+					console.log('Bad error');
+					db.doRelease(connection);
+					return done(err);
+				} 
+				else {
+					db.doRelease(connection);
+					//console.log('GOT Something')
+					
+					if (isAdmin == 'Y') {
+					//console.log(isAdmin);
 						res.render('admin/list', {
 							title: 'Matches List', 
-							data: ''
+							data: result.rows,
+							admin: 'Y',
+							messages:{}
 						})
 					} else {
-						// render to views/user/list.ejs template file
-						res.render('admin/list', {
-							title: 'Matches List', 
-							data: rows,
-							admin: 'Y'
-						})
+						res.redirect("/Options");
 					}
-				} else {
-					//req.flash('error', "You are not allowed to access this page")
-					res.redirect("/Options")
 				}
-			})
-		})
-	})
+			});
 	
-	app.get('/admin/users', isLoggedIn, function(req, res, next) {
-		req.getConnection(function(error, conn) {
-			conn.query('SELECT * FROM bpl_users ORDER BY user_id',function(err, rows, fields) {
-				//if(err) throw err
-				var isAdmin = req.session.admin
-				if (isAdmin == 'Y') {					
-					if (err) {
-						req.flash('error', err)
+		});
+	});	
+	
+	app.get('/admin/users', isLoggedIn, function(req, res, done) {
+		var selectSQL = "SELECT * FROM bpl_users ORDER BY user_id";
+		var param = [];
+		var isAdmin = req.session.admin;
+		
+		db.doConnect(function(err, connection){ 
+			if (err) {
+				console.log('error connection');
+				return done(err);
+			}
+			db.doSelect(connection, selectSQL,param,function(err, result) {
+				if (err) {
+					console.log('Bad error');
+					db.doRelease(connection);
+					return done(err);
+				} 
+				else {
+					db.doRelease(connection);
+					//console.log('GOT Something')
+					
+					if (isAdmin == 'Y') {
+					//console.log(isAdmin);						
 						res.render('admin/user', {
-							title: 'BPL Players', 
-							data: ''
+							title: 'BPL Players',
+							data: result.rows,
+							admin: 'Y',
+							messages:{}
 						})
 					} else {
-						// render to views/user/list.ejs template file
-						res.render('admin/user', {
-							title: 'BPL Players', 
-							data: rows,
-							admin: 'Y'
-						})
+						res.redirect("/Options");
 					}
-				} else {
-					//req.flash('error', "You are not allowed to access this page")
-					res.redirect("/Options")
 				}
-			})
-		})
-	})
+			});
+	
+		});
+	});		
+			
 
 };	
 	//module.exports = app
-function isLoggedIn(req,res,next){
+function isLoggedIn(req,res,done){
 		if(req.isAuthenticated())
-			return next();
+			return done();
 		res.redirect('/login');
 }
