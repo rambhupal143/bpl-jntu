@@ -1,4 +1,4 @@
-# bpl-jntu
+# bpl
 BPL
 --------------------------------------------------------------
 Developers  : 	Rambhupal Kottam

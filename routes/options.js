@@ -120,7 +120,7 @@ module.exports = function(app,passport) {
 								return done(err);
 							} 
 							else {
-								//console.log(result.rows)					
+								//console.log(result.rows)				
 								db.doRelease(connection);					
 								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
 								console.log(msg)
