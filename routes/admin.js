@@ -1,13 +1,12 @@
-//var bcrypt = require('bcrypt-nodejs');
-//var express = require('express')
-//var app = express()
+var LOGGER = require('log4js').getLogger("sms");
+var db = require("../config/oracledb.js");
 
 module.exports = function(app,passport) {	
 	app.post('/admin/update/(:id)', isLoggedIn, function(req, res, done) {
 		//res.send(req.body.optradio);
 		//console.log("Hello")
 		var isAdmin = req.session.admin
-		if (isAdmin == 'Y') {	
+		//if (isAdmin == 'Y') {	
 			freezeVal = 'N'
 			var selTeam = req.body.optradio
 			var freeze = req.body.freeze
@@ -47,7 +46,7 @@ module.exports = function(app,passport) {
 			});
 	
 		});
-	})
+	});
 
 	// SHOW LIST OF MATCHES
 	app.get('/admin', isLoggedIn, function(req, res, done) {

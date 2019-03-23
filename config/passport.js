@@ -95,7 +95,7 @@ module.exports = function(passport) {
         },
 			function(req, username, password, done) {
 				//console.log('local-login');
-				var selectSQL = "SELECT USER_ID,NAME,PASSWORD,ADMIN FROM BPL_USERS WHERE user_id =:username1 ";
+				var selectSQL = "SELECT lower(USER_ID),NAME,PASSWORD,upper(ADMIN) FROM BPL_USERS WHERE user_id =:username1 ";
 				var param = [];
 				//console.log(db);
 				//param.push(username.toUpperCase());
@@ -119,10 +119,10 @@ module.exports = function(passport) {
 							//Bhupal: For now no encyption
 							//if (md5(password) != result.rows[0][2]) {							
 								
-								if (password != result.rows[0][2]) {
+							if (password != result.rows[0][2]) {
 								console.log('wrong password');
-								//return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-								}
+								return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+							}
 							
 							//req.session.user_id = username
 							req.session.user_id = username
