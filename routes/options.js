@@ -37,7 +37,8 @@ module.exports = function(app,passport) {
 						title: 'Matches List', 
 						data: result.rows,
 						admin: isAdmin,
-						messages:{}
+						messages:{},
+						expressFlash: req.flash('success'),
 					})	
 				}
 			});
@@ -125,7 +126,8 @@ module.exports = function(app,passport) {
 								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
 								console.log(msg)
 								req.flash('success', msg);
-								res.redirect('/options');
+								//return done(null, false, req.flash('successMessage', msg));
+								res.redirect('/options/predictions');
 							}
 						});
 						
@@ -146,7 +148,7 @@ module.exports = function(app,passport) {
 								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
 								console.log(msg)
 								req.flash('success', msg);
-								res.redirect('/options');
+								res.redirect('/options/predictions');
 							}
 						});
 					}
@@ -184,6 +186,7 @@ module.exports = function(app,passport) {
 						title: 'Current Predictions', 
 						data: result.rows,
 						admin: "N",
+						expressFlash: req.flash('success'),
 						messages:{}						
 					})
 				}
