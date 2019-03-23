@@ -45,7 +45,7 @@ app.use(flash());
 //var index = require('./routes/index');
 require('./routes/logon')(app, passport);
 require('./routes/options')(app, passport);
-require('./routes/admin')(app, passport);
+//require('./routes/admin')(app, passport);
 
 
 app.use(require('connect-flash')());
