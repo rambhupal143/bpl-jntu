@@ -6,7 +6,7 @@ module.exports = function(app,passport) {
 		//res.send(req.body.optradio);
 		//console.log("Hello")
 		var isAdmin = req.session.admin
-		//if (isAdmin == 'Y') {	
+		if (isAdmin == 'Y') {	
 			freezeVal = 'N'
 			var selTeam = req.body.optradio
 			var freeze = req.body.freeze
@@ -14,14 +14,10 @@ module.exports = function(app,passport) {
 				freezeVal = 'Y'
 			}		
 			var matchNo = req.params.id
-			var userID = req.session.user_id		
+			//var userID = req.session.user_id		
 			
-			var match = {
-				result: selTeam,
-				freezed: freezeVal
-			}
-			var updareQuery = 'update bpl_matches SET ? where id = ' + matchNo;
-			var params = [matchNo]
+			var updareQuery = 'update bpl_matches SET result = :result , freezed = :freezed where id = :matchNo';
+			var params = [selTeam,freezeVal,matchNo]
 			
 			db.doConnect(function(err, connection){ 
 			if (err) {
@@ -33,7 +29,7 @@ module.exports = function(app,passport) {
 					console.log('Bad error');
 					db.doRelease(connection);
 					res.redirect('/admin')					
-					return done(err);
+					//return done(err);
 				} 
 				else {
 					//console.log(result.rows)					
@@ -46,11 +42,14 @@ module.exports = function(app,passport) {
 			});
 	
 		});
+		} else {
+			res.redirect('/options');
+		}
 	});
 
 	// SHOW LIST OF MATCHES
 	app.get('/admin', isLoggedIn, function(req, res, done) {
-		var selectSQL = "SELECT * FROM bpl_matches ORDER BY id";
+		var selectSQL ="SELECT id, TO_CHAR(match_date, 'YYYY-MM-DD HH24:MI:SS') as match_date ,team1, team2,result, description, venue, freezed FROM bpl_matches order by id";
 		var param = [];
 		var isAdmin = req.session.admin;
 		
@@ -75,7 +74,8 @@ module.exports = function(app,passport) {
 							title: 'Matches List', 
 							data: result.rows,
 							admin: 'Y',
-							messages:{}
+							messages:{},
+							expressFlash: req.flash('success')
 						})
 					} else {
 						res.redirect("/Options");
@@ -111,8 +111,9 @@ module.exports = function(app,passport) {
 						res.render('admin/user', {
 							title: 'BPL Players',
 							data: result.rows,
-							admin: 'Y',
-							messages:{}
+							admin: isAdmin,
+							messages:{},
+							expressFlash: req.flash('success')
 						})
 					} else {
 						res.redirect("/Options");

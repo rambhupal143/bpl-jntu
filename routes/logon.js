@@ -42,7 +42,7 @@ module.exports = function(app, passport) {
 		}),
         function(req, res) {
 	    if (req.body.remember) {
-              req.session.cookie.maxAge = 1000 * 60 * 30;
+              req.session.cookie.maxAge = 1000 * 60 * 3000;
             } else {
               req.session.cookie.expires = false;
             }

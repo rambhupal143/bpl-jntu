@@ -12,7 +12,7 @@ module.exports = function(app,passport) {
 	
 	// SHOW LIST OF MATCHES
 	app.get('/options', isLoggedIn, function(req, res, done) {
-		var selectSQL = "SELECT id, match_date,team1, team2,result, description, venue, freezed FROM bpl_matches order by id";
+		var selectSQL = "SELECT id, TO_CHAR(match_date, 'YYYY-MM-DD HH24:MI:SS') as match_date ,team1, team2,result, description, venue, freezed FROM bpl_matches order by id";
 		var param = [];
 		//console.log(req.session.user_id);
 		//param.push(anyVal);
@@ -32,58 +32,30 @@ module.exports = function(app,passport) {
 					db.doRelease(connection);
 					//console.log('GOT Something')
 					var isAdmin = req.session.admin
-					//console.log(isAdmin);
-					res.render('options/list', {
-						title: 'Matches List', 
-						data: result.rows,
-						admin: isAdmin,
-						messages:{},
-						expressFlash: req.flash('success'),
-					})	
+					//console.log(isAdmin)
+					if (isAdmin == "Y") {
+						console.log(isAdmin);
+						res.render('options/list', {
+							title: 'Matches List', 
+							data: result.rows,
+							admin: isAdmin,
+							messages:{},
+							expressFlash: req.flash('success')
+						})
+					} else {
+						res.render('options/list', {
+							title: 'Matches List',
+							data: result.rows,
+							admin: isAdmin,
+							messages:{},
+							expressFlash: req.flash('success')
+						})	
+					}
 				}
 			});
 	
 		});	
 	})	
-	
-	// Update the prediction for winner
-	app.post('/options/update_old/(:id)', isLoggedIn, function(req, res, done) {
-		
-		//console.log("hello")
-		var selTeam = req.body.optradio
-		var matchNo = req.params.id
-		var userID = req.session.user_id
-		
-		//var columnName = 'M' + matchNo		
-		var updareQuery = "UPDATE bpl_options SET TEAM_NAME = :selTeam WHERE user_id = :userID AND match_id = :matchNo";
-		var params = [selTeam,userID,matchNo]
-		//console.log(updareQuery, " ", selTeam, " ",columnName, " ", userID)
-		//params.push(anyVal);
-		db.doConnect(function(err, connection){ 
-			if (err) {
-				console.log('error connection');
-				return done(err);
-			}
-			db.doExecute(connection, updareQuery, params, function(err, result) {
-				if (err) {
-					console.log('Bad error');					
-					res.redirect('/options');
-					db.doRelease(connection);
-					return done(err);
-				} 
-				else {
-					//console.log(result.rows)					
-					db.doRelease(connection);					
-					var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
-					console.log(msg)
-					req.flash('success', msg);
-					res.redirect('/options');
-				}
-			});
-	
-		});	
-	})
-
 	
 	app.post('/options/update/(:id)', isLoggedIn, function(req, res, done) {
 		
@@ -166,6 +138,7 @@ module.exports = function(app,passport) {
 		//var anyVal = '*';
 		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW";
 		var param = [];
+		var isAdmin = req.session.admin
 		//console.log(req.session.user_id);
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
@@ -185,7 +158,7 @@ module.exports = function(app,passport) {
 					res.render('options/predictions', {
 						title: 'Current Predictions', 
 						data: result.rows,
-						admin: "N",
+						admin: isAdmin,
 						expressFlash: req.flash('success'),
 						messages:{}						
 					})
@@ -200,6 +173,7 @@ module.exports = function(app,passport) {
 		//var anyVal = '*';
 		var selectSQL = "SELECT * FROM bpl_champion";
 		var param = [];		
+		var isAdmin = req.session.admin
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
 			if (err) {
@@ -219,7 +193,8 @@ module.exports = function(app,passport) {
 						title: 'Champion Predictions', 
 						data: result.rows,
 						admin: isAdmin,
-						messages:{}						
+						messages:{},
+						expressFlash: req.flash('success')
 					})
 				}
 			});
@@ -264,7 +239,8 @@ module.exports = function(app,passport) {
 	app.get('/options/points', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
 		var selectSQL = "SELECT * FROM BPL_FINAL_POINTS_SUMMARY_VW";
-		var param = [];		
+		var param = [];	
+		var isAdmin = req.session.admin
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
 			if (err) {
@@ -283,8 +259,9 @@ module.exports = function(app,passport) {
 					res.render('options/points', {
 						title: 'Points Summary', 
 						data: result.rows,
-						admin: "N",
-						messages:{}						
+						admin: isAdmin,
+						messages:{},
+						expressFlash: req.flash('success')						
 					})
 				}
 			});
