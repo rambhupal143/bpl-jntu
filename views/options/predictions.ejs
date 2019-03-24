@@ -1,14 +1,14 @@
 <!--
 including header content which is common for all pages
 -->
-<%- include ../layouts/header.ejs %>
-
-<% if (messages.error) { %>
-	<p style="color:red"><%- messages.error %></p>
-<% } %>
+<% if (admin == 'Y') { %>
+	<%- include ../layouts/adminheader.ejs %>
+<% } else { %>
+	<%- include ../layouts/header.ejs %>
+<% } %>	
 
 <% if ( expressFlash.length > 0 ) { %>
-	<p style="color:green"><%- expressFlash %></p>
+	<p style="color:green" "font-size:15px"><%- expressFlash %></p>
 <% } %>	
 
 <table width='40%' border=1 style="border-collapse: collapse;">

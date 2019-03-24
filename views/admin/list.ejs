@@ -1,14 +1,14 @@
 <!--
 including header content which is common for all pages
 -->
-<%- include ../layouts/adminheader.ejs %>
+<% if (admin == 'Y') { %>
+	<%- include ../layouts/adminheader.ejs %>
+<% } else { %>
+	<%- include ../layouts/header.ejs %>
+<% } %>	
 
-<% if (messages.error) { %>
-	<p style="color:red"><%- messages.error %></p>
-<% } %>
-
-<% if (messages.success) { %>
-	<p style="color:green"><%- messages.success %></p>
+<% if ( expressFlash.length > 0 ) { %>
+	<p style="color:green" "font-size:15px"><%- expressFlash %></p>
 <% } %>	
 
 <table width='50%' border=1 style="border-collapse: collapse;">
@@ -46,7 +46,6 @@ including header content which is common for all pages
 					<div class="form-group" id="freezer">
 					<input id="freeze" type="checkbox" name="freeze">Freeze?</>
 					<input type="submit" class="btn btn-success"/>
-
 					</div>
 					
 				</form>
