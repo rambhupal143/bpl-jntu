@@ -159,15 +159,14 @@ module.exports = function(app,passport) {
 	})
 	
 	
-	
-	
-	// Show the current choice of predictions
 	app.get('/options/predictions', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
-		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW";
+		
+		var userID = req.session.user_id;
+		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW where user_id != :userID union SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW12 where user_id = :userID";
 		var param = [];
 		//console.log(req.session.user_id);
-		//param.push(anyVal);
+		param.push(userID);
 		db.doConnect(function(err, connection){ 
 			if (err) {
 				console.log('error connection');
