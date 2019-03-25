@@ -95,7 +95,7 @@ module.exports = function(passport) {
         },
 			function(req, username, password, done) {
 				//console.log('local-login');
-				var selectSQL = "SELECT lower(USER_ID),NAME,PASSWORD,upper(ADMIN) FROM BPL_USERS WHERE user_id =:username1 ";
+				var selectSQL = "SELECT USER_ID,NAME,PASSWORD,ADMIN FROM BPL_USERS WHERE user_id =:username1 ";
 				var param = [];
 				//console.log(db);
 				//param.push(username.toUpperCase());

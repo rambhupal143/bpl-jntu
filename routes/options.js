@@ -137,6 +137,7 @@ module.exports = function(app,passport) {
 	app.get('/options/predictions', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
 		var userID = req.session.user_id
+		var isAdmin = req.session.admin
 		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW WHERE user_id != :userID union SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW12 WHERE user_id = :userID";
 		var param = [];
 		//console.log(req.session.user_id);
