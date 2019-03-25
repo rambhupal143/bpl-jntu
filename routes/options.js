@@ -100,6 +100,7 @@ module.exports = function(app,passport) {
 		//param.push(username.toUpperCase());
 		db.doConnect(function(err, connection){  
 			if (err) {
+				db.doRelease(connection);
 				return done(err);
 			}
 			db.doExecute(connection, selectSQL,param,function(err, result) {
@@ -170,6 +171,7 @@ module.exports = function(app,passport) {
 		db.doConnect(function(err, connection){ 
 			if (err) {
 				console.log('error connection');
+				db.doRelease(connection);
 				return done(err);
 			}
 			db.doSelect(connection, selectSQL,param,function(err, result) {
@@ -268,6 +270,7 @@ module.exports = function(app,passport) {
 		db.doConnect(function(err, connection){ 
 			if (err) {
 				console.log('error connection');
+				db.doRelease(connection);
 				return done(err);
 			}
 			db.doSelect(connection, selectSQL,param,function(err, result) {
