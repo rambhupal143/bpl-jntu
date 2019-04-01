@@ -12,7 +12,7 @@ module.exports = function(app,passport) {
 	
 	// SHOW LIST OF MATCHES
 	app.get('/options', isLoggedIn, function(req, res, done) {
-		var selectSQL = "SELECT id, TO_CHAR(match_date, 'YYYY-MM-DD HH24:MI:SS') as match_date ,team1, team2,result, description, venue, freezed FROM bpl_matches order by id";
+		var selectSQL = "SELECT id, TO_CHAR(match_date, 'YYYY-MM-DD HH24:MI:SS') as match_date ,team1, team2,result, description, venue, freezed FROM bpl_matches where id < 100 order by id";
 		var param = [];
 		//console.log(req.session.user_id);
 		//param.push(anyVal);
@@ -46,6 +46,55 @@ module.exports = function(app,passport) {
 					} else {
 						res.render('options/list', {
 							title: 'Matches List',
+							data: result.rows,
+							admin: isAdmin,
+							messages:{},
+							expressFlash: req.flash('success')
+						})	
+					}
+				}
+			});
+	
+		});	
+	})	
+	
+	
+	// SHOW LIST OF MATCHES
+	app.get('/options/optionalbonus', isLoggedIn, function(req, res, done) {
+		var selectSQL = "SELECT id, description FROM bpl_matches where id > 100 order by id";
+		var param = [];
+		//console.log(req.session.user_id);
+		//param.push(anyVal);
+		db.doConnect(function(err, connection){ 
+			if (err) {
+				console.log('error connection');
+				db.doRelease(connection);
+				return done(err);
+			}
+			db.doSelect(connection, selectSQL,param,function(err, result) {
+				if (err) {
+					console.log('Bad error');
+					db.doRelease(connection);
+					return done(err);
+				} 
+				else {
+					//console.log(result.rows)
+					db.doRelease(connection);
+					//console.log('GOT Something')
+					var isAdmin = req.session.admin
+					//console.log(isAdmin)
+					if (isAdmin == "Y") {
+						console.log(isAdmin);
+						res.render('options/optionalbonus', {
+							title: 'optional bonus List', 
+							data: result.rows,
+							admin: isAdmin,
+							messages:{},
+							expressFlash: req.flash('success')
+						})
+					} else {
+						res.render('options/optionalbonus', {
+							title: 'optional bonus List',
 							data: result.rows,
 							admin: isAdmin,
 							messages:{},
@@ -133,7 +182,79 @@ module.exports = function(app,passport) {
 	})
 	
 	
-	
+		app.post('/options/optionalbonusupdate/(:id)', isLoggedIn, function(req, res, done) {
+		
+		//console.log("hello")
+		var selTeam = req.body.optionalbonus
+		var matchNo = req.params.id
+		var userID = req.session.user_id
+		
+		//var columnName = 'M' + matchNo		
+		//var updareQuery = "UPDATE bpl_options SET TEAM_NAME = :selTeam WHERE user_id = :userID AND match_id = :matchNo";
+		//var params = [selTeam,userID,matchNo]
+		var selectSQL = "SELECT * FROM bpl_options WHERE user_id =:username AND match_id = :matchNo";
+		var param = [userID,matchNo];
+		//param.push(username.toUpperCase());
+		db.doConnect(function(err, connection){  
+			if (err) {
+				db.doRelease(connection);
+				return done(err);
+			}
+			db.doExecute(connection, selectSQL,param,function(err, result) {
+				if (err) {
+					db.doRelease(connection);
+					return done(err);
+				} 
+				else {
+					if (result.rows.length) {
+						//db.doRelease(connection);
+						console.log('RECORD EXISTS');
+						var updareQuery = "UPDATE bpl_options SET TEAM_NAME = :selTeam WHERE user_id = :userID AND match_id = :matchNo";
+						var paramNew = [selTeam,userID,matchNo];
+						db.doExecute(connection, updareQuery, paramNew, function(err, result) {
+							if (err) {
+								console.log('Bad error');					
+								res.redirect('/options');
+								db.doRelease(connection);
+								return done(err);
+							} 
+							else {
+								//console.log(result.rows)				
+								db.doRelease(connection);					
+								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
+								console.log(msg)
+								req.flash('success', msg);
+								//return done(null, false, req.flash('successMessage', msg));
+								res.redirect('/options/predictions');
+							}
+						});
+						
+						//return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+					} else {
+						console.log('RECORD NOT FOUND AND GOING TO INSERT');
+						
+						var bindParam = [userID,matchNo,selTeam];						
+						var insertQuery = "INSERT INTO BPL_OPTIONS (user_id,match_id,team_name) values(:userID,:matchNo,:selTeam)";
+						db.doExecute(connection,insertQuery,bindParam,function(err, insResult) {
+							if (err) {
+								db.doRelease(connection);
+								return done(err);
+							} else {
+								LOGGER.debug('INSERTION RESULT:'+JSON.stringify(insResult));
+								db.doRelease(connection);
+								//return done(null,false, req.flash('signupMessage', 'Signed up Successfully!'));
+								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
+								console.log(msg)
+								req.flash('success', msg);
+								res.redirect('/options/predictions');
+							}
+						});
+					}
+				}
+			});
+		
+		});         
+	})
 	
 	// Show the current choice of predictions
 	app.get('/options/predictions', isLoggedIn, function(req, res, done) {
@@ -171,6 +292,9 @@ module.exports = function(app,passport) {
 	
 		});	
 	})			
+	
+	
+	
 	
 	//Show champion predictions
 	app.get('/options/predictchampion', isLoggedIn, function(req, res, done) {

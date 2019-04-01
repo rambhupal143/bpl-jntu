@@ -1,0 +1,58 @@
+<!--
+including header content which is common for all pages
+-->
+
+<% if (admin == 'Y') { %>
+	<%- include ../layouts/adminheader.ejs %>
+<% } else { %>
+	<%- include ../layouts/header.ejs %>
+<% } %>	
+
+<% if ( expressFlash.length > 0 ) { %>
+	<p style="color:green" "font-size:15px"><%- expressFlash %></p>
+<% } %>	
+
+<table width='70%' border=2 style="border-collapse: collapse;">
+
+	<tr style='text-align:left; background-color:#92a8d1'; height=50px>
+		<th>Bonus ID</th>
+		<th>Bonus Description</th>
+		<th>Option</th>
+		
+	</tr>	
+	<% if (data) { %>
+	<% data.forEach(function(bpl_bonus){ %>
+		<tr>
+			<td><%= bpl_bonus.ID %></td>
+			<td><%= bpl_bonus.DESCRIPTION %></td>
+			<%if (bpl_bonus.FREEZED != "Y") { %>
+				<td>				
+						
+			
+			<form role="form" id="updateBonusOptions" action="/options/optionalbonusupdate/<%= bpl_bonus.ID %>" method="POST">
+					<div class="form-group">
+                    
+                    <input type="text" class="form-control" placeholder="Team eg: RCB & Player eg: Jasprit Bumrah"  name="optionalbonus">
+                </div>
+                                
+                <button type="submit" class="btn btn-warning btn-lg">opt</button>
+								
+				</form>
+				
+
+				</td>
+			<% } else{ %>
+			   <td><%= bpl_match.RESULT %></td>	
+			<% } %>
+			<!--<% if (admin == 'Y') { %>
+				<input type="submit" value="Admin" />
+			<% } %>-->
+		</tr>
+	<% }) %>
+	<% } %>
+</table>
+
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>
