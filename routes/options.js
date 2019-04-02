@@ -97,7 +97,7 @@ module.exports = function(app,passport) {
 		});	
 	})	
 	
-	app.post('/options/update/(:id)', isLoggedIn, function(req, res, done) {
+		app.post('/options/update/(:id)', isLoggedIn, function(req, res, done) {
 		
 		//console.log("hello")
 		var selTeam = req.body.optradio
@@ -172,7 +172,6 @@ module.exports = function(app,passport) {
 		
 		});         
 	})
-	
 	
 		app.post('/options/optionalbonusupdate/(:id)', isLoggedIn, function(req, res, done) {
 		
