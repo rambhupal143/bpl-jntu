@@ -11,15 +11,16 @@ including header content which is common for all pages
 <% if ( expressFlash.length > 0 ) { %>
 	<p style="color:green" "font-size:15px"><%- expressFlash %></p>
 <% } %>	
+<form role="form" id="createAccountForm" action="/options/update" method="POST">
 
-<table width='70%' border=2 style="border-collapse: collapse;">
-
+<table width='60%' border=2 style="border-collapse: collapse;">
+	
 	<tr style='text-align:left; background-color:#92a8d1'; height=50px>
 		<th>Match No</th>
 		<th>Date</th>
 		<th>Description</th>
 		<th>Venue</th>
-		<th>Winner</th>
+		<th>Winner             <input type="submit" class="btn btn-success"/></th>
 	</tr>	
 	<% if (data) { %>
 	<% data.forEach(function(bpl_match){ %>
@@ -29,14 +30,11 @@ including header content which is common for all pages
 			<td><%= bpl_match.DESCRIPTION %></td>
 			<td><%= bpl_match.VENUE %></td>
 			<%if (bpl_match.FREEZED != "Y") { %>
-				<td>				
-					<form role="form" id="createAccountForm" action="/options/update/<%= bpl_match.ID %>" method="POST">
+				<td>			
 						<div class="form-group" id="gender">
-							<label class="radio-inline"><input type="radio" name="optradio" checked="checked" value=<%=bpl_match.TEAM1 %>><%=bpl_match.TEAM1 %></label>
-							<label class="radio-inline"><input type="radio" name="optradio" value=<%=bpl_match.TEAM2 %>><%=bpl_match.TEAM2 %></label>
-							<input type="submit" class="btn btn-success"/>					
-						</div>						
-					</form>
+							<label class="radio-inline"><input type="radio" name="match_<%= bpl_match.ID %>" value=<%=bpl_match.TEAM1 %>><%=bpl_match.TEAM1 %></label>
+							<label class="radio-inline"><input type="radio" name="match_<%= bpl_match.ID %>" value=<%=bpl_match.TEAM2 %>><%=bpl_match.TEAM2 %></label>											
+						</div>					
 				</td>
 			<% } else{ %>
 			   <td><%= bpl_match.RESULT %></td>	
@@ -48,6 +46,7 @@ including header content which is common for all pages
 	<% }) %>
 	<% } %>
 </table>
+</form>
 
 <!--
 including footer content which is common for all pages

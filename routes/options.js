@@ -33,25 +33,15 @@ module.exports = function(app,passport) {
 					db.doRelease(connection);
 					//console.log('GOT Something')
 					var isAdmin = req.session.admin
-					//console.log(isAdmin)
-					if (isAdmin == "Y") {
-						console.log(isAdmin);
-						res.render('options/list', {
-							title: 'Matches List', 
-							data: result.rows,
-							admin: isAdmin,
-							messages:{},
-							expressFlash: req.flash('success')
-						})
-					} else {
-						res.render('options/list', {
-							title: 'Matches List',
-							data: result.rows,
-							admin: isAdmin,
-							messages:{},
-							expressFlash: req.flash('success')
-						})	
-					}
+					//console.log(isAdmin);
+					res.setHeader('X-Username', req.session.header_name);
+					res.render('options/list', {
+						title: 'Matches List', 
+						data: result.rows,
+						admin: isAdmin,
+						messages:{},
+						expressFlash: req.flash('success'),
+					})	
 				}
 			});
 	
@@ -146,8 +136,9 @@ module.exports = function(app,passport) {
 							else {
 								//console.log(result.rows)				
 								db.doRelease(connection);					
-								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
-								console.log(msg)
+								var msg = req.session.header_name + "! " + selTeam + " is updated for Match No:" + matchNo + " Wish u all the best!";
+								console.log(msg);
+								res.setHeader('X-Username', req.session.header_name);
 								req.flash('success', msg);
 								//return done(null, false, req.flash('successMessage', msg));
 								res.redirect('/options/predictions');
@@ -168,8 +159,9 @@ module.exports = function(app,passport) {
 								LOGGER.debug('INSERTION RESULT:'+JSON.stringify(insResult));
 								db.doRelease(connection);
 								//return done(null,false, req.flash('signupMessage', 'Signed up Successfully!'));
-								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
-								console.log(msg)
+								var msg = req.session.header_name + "! " + selTeam + " is updated for Match No:" + matchNo + " Wish u all the best!";
+								console.log(msg);
+								res.setHeader('X-Username', req.session.header_name);
 								req.flash('success', msg);
 								res.redirect('/options/predictions');
 							}
@@ -279,7 +271,8 @@ module.exports = function(app,passport) {
 				} 
 				else {
 					//console.log(result.rows)
-					db.doRelease(connection);					
+					db.doRelease(connection);	
+					res.setHeader('X-Username', req.session.header_name);
 					res.render('options/predictions', {
 						title: 'Current Predictions', 
 						data: result.rows,
@@ -301,7 +294,6 @@ module.exports = function(app,passport) {
 		//var anyVal = '*';
 		var selectSQL = "SELECT * FROM bpl_champion";
 		var param = [];		
-		var isAdmin = req.session.admin
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
 			if (err) {
@@ -322,8 +314,7 @@ module.exports = function(app,passport) {
 						title: 'Champion Predictions', 
 						data: result.rows,
 						admin: isAdmin,
-						messages:{},
-						expressFlash: req.flash('success')
+						messages:{}						
 					})
 				}
 			});
@@ -368,9 +359,9 @@ module.exports = function(app,passport) {
 	//Show champion predictions
 	app.get('/options/points', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
-		var selectSQL = "SELECT * FROM BPL_FINAL_POINTS_SUMMARY_VW";
-		var param = [];	
 		var isAdmin = req.session.admin
+		var selectSQL = "SELECT * FROM BPL_FINAL_POINTS_SUMMARY_VW";
+		var param = [];		
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
 			if (err) {
@@ -386,13 +377,14 @@ module.exports = function(app,passport) {
 				} 
 				else {
 					//console.log(result.rows)
-					db.doRelease(connection);					
+					db.doRelease(connection);
+					res.setHeader('X-Username', req.session.header_name);
 					res.render('options/points', {
 						title: 'Points Summary', 
 						data: result.rows,
 						admin: isAdmin,
-						messages:{},
-						expressFlash: req.flash('success')						
+						expressFlash: req.flash('success'),
+						messages:{}						
 					})
 				}
 			});

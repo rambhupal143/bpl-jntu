@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var flash    = require('connect-flash');
 require('./config/passport')(passport);
+var dialog = require('dialog');
 
 
 var app = express();
