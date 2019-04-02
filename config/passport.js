@@ -124,7 +124,7 @@ module.exports = function(passport) {
 								return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
 							}
 							
-							//req.session.user_id = username
+							req.session.header_name = result.rows[0][1]
 							req.session.user_id = username
 							//console.log(result.rows[0])
 							req.session.admin = result.rows[0][3]

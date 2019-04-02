@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var flash    = require('connect-flash');
 require('./config/passport')(passport);
+var dialog = require('dialog');
 
 
 var app = express();
@@ -86,7 +87,7 @@ oracledb.createPool({
     user:             dbconfig.user,
     password:         dbconfig.password,
     connectString:    dbconfig.connectString,
-    poolMax:          100,
+    poolMax:          1000,
     poolMin:          2,
     poolIncrement:    5,
     poolTimeout:      4

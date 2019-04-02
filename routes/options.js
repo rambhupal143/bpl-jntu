@@ -12,7 +12,9 @@ module.exports = function(app,passport) {
 	
 	// SHOW LIST OF MATCHES
 	app.get('/options', isLoggedIn, function(req, res, done) {
-		var selectSQL = "SELECT id, TO_CHAR(match_date, 'YYYY-MM-DD HH24:MI:SS') as match_date ,team1, team2,result, description, venue, freezed FROM bpl_matches order by id";
+		var selectSQL = "SELECT id, to_char(match_date,'DD-MON-YY hh:mm') as match_date,team1, team2,result, description, venue, freezed FROM bpl_matches " + 
+				"where result is null union all SELECT id, to_char(match_date,'DD-MON-YY hh:mm') as match_date,team1, team2,result, description, venue, freezed FROM " +
+				"bpl_matches where result is not null";
 		var param = [];
 		//console.log(req.session.user_id);
 		//param.push(anyVal);
@@ -32,30 +34,22 @@ module.exports = function(app,passport) {
 					db.doRelease(connection);
 					//console.log('GOT Something')
 					var isAdmin = req.session.admin
-					//console.log(isAdmin)
-					if (isAdmin == "Y") {
-						console.log(isAdmin);
-						res.render('options/list', {
-							title: 'Matches List', 
-							data: result.rows,
-							admin: isAdmin,
-							messages:{},
-							expressFlash: req.flash('success')
-						})
-					} else {
-						res.render('options/list', {
-							title: 'Matches List',
-							data: result.rows,
-							admin: isAdmin,
-							messages:{},
-							expressFlash: req.flash('success')
-						})	
-					}
+					//console.log(isAdmin);
+					res.setHeader('X-Username', req.session.header_name);
+					res.render('options/list', {
+						title: 'Matches List', 
+						data: result.rows,
+						admin: isAdmin,
+						messages:{},
+						expressFlash: req.flash('success'),
+					})	
 				}
 			});
 	
 		});	
 	})	
+	
+	// Update the prediction for winner
 	
 	app.post('/options/update/(:id)', isLoggedIn, function(req, res, done) {
 		
@@ -95,8 +89,9 @@ module.exports = function(app,passport) {
 							else {
 								//console.log(result.rows)				
 								db.doRelease(connection);					
-								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
-								console.log(msg)
+								var msg = req.session.header_name + "! " + selTeam + " is updated for Match No:" + matchNo + " Wish u all the best!";
+								console.log(msg);
+								res.setHeader('X-Username', req.session.header_name);
 								req.flash('success', msg);
 								//return done(null, false, req.flash('successMessage', msg));
 								res.redirect('/options/predictions');
@@ -117,8 +112,9 @@ module.exports = function(app,passport) {
 								LOGGER.debug('INSERTION RESULT:'+JSON.stringify(insResult));
 								db.doRelease(connection);
 								//return done(null,false, req.flash('signupMessage', 'Signed up Successfully!'));
-								var msg = "Bingo!! You made a great choice for Match No:" + matchNo + " with " + selTeam + "! Wish you all the best! "
-								console.log(msg)
+								var msg = req.session.header_name + "! " + selTeam + " is updated for Match No:" + matchNo + " Wish u all the best!";
+								console.log(msg);
+								res.setHeader('X-Username', req.session.header_name);
 								req.flash('success', msg);
 								res.redirect('/options/predictions');
 							}
@@ -132,15 +128,80 @@ module.exports = function(app,passport) {
 	
 	
 	
+	app.post('/options/update', isLoggedIn, function(req, res, done) {
+		
+		//console.log("hello")
+		
+		
+		//var selTeam = req.body.optradio_11
+		var reqBody = req.body;		
+		var userID = req.session.user_id;
+		
+		var matchIDs = "(";
+		for (var key in reqBody) {
+			m_id = key.replace("match_","");			
+			matchIDs += m_id + ",";
+			console.log(matchIDs);
+		};
+		//console.log(matchIDs);
+		matchIDs = matchIDs.slice(0, -1);
+		//matchIDs.deleteCharAt(matchIDs.length() - 1);
+		matchIDs = matchIDs + ")";
+		var params = [userID];
+		//console.log(matchIDs);
+		
+		db.doConnect(function(err, connection){  
+			if (err) {
+				return done(err);
+			}		
+			
+			selectSQL = "DELETE FROM bpl_options where user_id = :userID and match_id in " + matchIDs;
+			//selectSQL = "DELETE FROM bpl_options where match_id > 13";
+			//console.log(selectSQL);
+			db.doExecute(connection, selectSQL,params,function(err, result) {
+				if (err) {
+					db.doRelease(connection);
+					console.log('Bad error');					
+					res.redirect('/options');
+					return done(err);
+				} 
+				else {					
+					db.doBulkPredict(connection, userID, reqBody, function(err, result) {
+						if (err) {
+							console.log('Bad error');					
+							res.redirect('/options');
+							db.doRelease(connection);
+							return done(err);
+						} 
+						else {
+							//console.log(result.rows)				
+							db.doRelease(connection);					
+							//var msg = req.session.header_name + "! " + selTeam + " is updated for Match No:" + matchNo + " Wish u all the best!";
+							var optionsCount = Object.keys(reqBody).length;
+							var msg = req.session.header_name + "! " + JSON.stringify(reqBody) + " Options have been updated!";
+							console.log(msg);
+							res.setHeader('X-Username', req.session.header_name);
+							req.flash('success', msg);
+							//return done(null, false, req.flash('successMessage', msg));
+							res.redirect('/options/predictions');
+						}
+					});
+				}
+			});	
+		});         
+	})
+	
+	
 	
 	// Show the current choice of predictions
 	app.get('/options/predictions', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
-		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW";
-		var param = [];
+		var userID = req.session.user_id
 		var isAdmin = req.session.admin
+		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW WHERE user_id != :userID union SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW12 WHERE user_id = :userID";
+		var param = [];
 		//console.log(req.session.user_id);
-		//param.push(anyVal);
+		param.push(userID);
 		db.doConnect(function(err, connection){ 
 			if (err) {
 				console.log('error connection');
@@ -154,7 +215,8 @@ module.exports = function(app,passport) {
 				} 
 				else {
 					//console.log(result.rows)
-					db.doRelease(connection);					
+					db.doRelease(connection);	
+					res.setHeader('X-Username', req.session.header_name);
 					res.render('options/predictions', {
 						title: 'Current Predictions', 
 						data: result.rows,
@@ -173,7 +235,6 @@ module.exports = function(app,passport) {
 		//var anyVal = '*';
 		var selectSQL = "SELECT * FROM bpl_champion";
 		var param = [];		
-		var isAdmin = req.session.admin
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
 			if (err) {
@@ -193,8 +254,7 @@ module.exports = function(app,passport) {
 						title: 'Champion Predictions', 
 						data: result.rows,
 						admin: isAdmin,
-						messages:{},
-						expressFlash: req.flash('success')
+						messages:{}						
 					})
 				}
 			});
@@ -238,9 +298,9 @@ module.exports = function(app,passport) {
 	//Show champion predictions
 	app.get('/options/points', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
-		var selectSQL = "SELECT * FROM BPL_FINAL_POINTS_SUMMARY_VW";
-		var param = [];	
 		var isAdmin = req.session.admin
+		var selectSQL = "SELECT * FROM BPL_FINAL_POINTS_SUMMARY_VW";
+		var param = [];		
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
 			if (err) {
@@ -255,13 +315,14 @@ module.exports = function(app,passport) {
 				} 
 				else {
 					//console.log(result.rows)
-					db.doRelease(connection);					
+					db.doRelease(connection);
+					res.setHeader('X-Username', req.session.header_name);
 					res.render('options/points', {
 						title: 'Points Summary', 
 						data: result.rows,
 						admin: isAdmin,
-						messages:{},
-						expressFlash: req.flash('success')						
+						expressFlash: req.flash('success'),
+						messages:{}						
 					})
 				}
 			});

@@ -49,7 +49,9 @@ module.exports = function(app,passport) {
 
 	// SHOW LIST OF MATCHES
 	app.get('/admin', isLoggedIn, function(req, res, done) {
-		var selectSQL ="SELECT id, TO_CHAR(match_date, 'YYYY-MM-DD HH24:MI:SS') as match_date ,team1, team2,result, description, venue, freezed FROM bpl_matches order by id";
+		var selectSQL = "SELECT id, to_char(match_date,'DD-MON-YY hh:mm') as match_date,team1, team2,result, description, venue, freezed FROM bpl_matches " + 
+				"where result is null union all SELECT id, to_char(match_date,'DD-MON-YY hh:mm') as match_date,team1, team2,result, description, venue, freezed FROM " +
+				"bpl_matches where result is not null";
 		var param = [];
 		var isAdmin = req.session.admin;
 		
