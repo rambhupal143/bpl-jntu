@@ -11,11 +11,11 @@ including header content which is common for all pages
 	<p style="color:green; font-size:30px"><%- expressFlash %></p>
 	
 <% } %>	
-
+<div class="tabledata">
 <table width='40%' border=1 style="border-collapse: collapse;">
 
 	<tr style='text-align:left; background-color:#bb99ff'; height=50px>
-		<th>Name</th>
+		<th class="headcol"></th>
 		<% for(var i=1; i<57; i++) {%>
 			<th>M<%= i %></th>
 		<% } %>	
@@ -23,7 +23,7 @@ including header content which is common for all pages
 	<% if (data) { %>
 	<% data.forEach(function(bpl_prediction){ %>
 		<tr>
-			<td><%= bpl_prediction.NAME %></td>
+			<td class="headcol"><%= bpl_prediction.NAME %></td>
 			<td><%= bpl_prediction.M1 %></td>
 			<td><%= bpl_prediction.M2 %></td>
 			<td><%= bpl_prediction.M3 %></td>
@@ -84,6 +84,6 @@ including header content which is common for all pages
 	<% }) %>
 	<% } %>
 </table>
-
+<div class="tabledata">
 <!--including footer content which is common for all pages-->
 <%- include ../layouts/footer.ejs %>

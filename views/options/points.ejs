@@ -10,11 +10,11 @@ including header content which is common for all pages
 <% if ( expressFlash.length > 0 ) { %>
 	<p style="color:green" "font-size:40px"><%- expressFlash %></p>
 <% } %>	
-
-<table width='40%' border=1 style="border-collapse: collapse;">
+<div class="tabledata">
+<table width='40%' border=1 style="border-collapse: collapse; ">
 
 	<tr style='text-align:left; background-color:#ff9999'; height=50px>
-		<th>Name</th>
+		<th class="headcol"></th>
 		<th>Total</th>
 		<% for(var i=1; i<57; i++) {%>
 			<th>M<%= i %></th>
@@ -23,7 +23,7 @@ including header content which is common for all pages
 	<% if (data) { %>
 	<% data.forEach(function(bpl_points){ %>
 		<tr>
-			<td><%= bpl_points.NAME %></td>
+			<td class="headcol"><%= bpl_points.NAME %></td>
 			<td><%= bpl_points.TOTAL_POINTS %></td>
 			<td><%= bpl_points.M1 %></td>
 			<td><%= bpl_points.M2 %></td>
@@ -85,7 +85,7 @@ including header content which is common for all pages
 	<% }) %>
 	<% } %>
 </table>
-
+<div>
 <!--
 including footer content which is common for all pages
 -->
