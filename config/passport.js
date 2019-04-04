@@ -15,6 +15,7 @@ module.exports = function(passport) {
     passport.deserializeUser(function(id, done) {       
 		//var selectSQL = "SELECT ID,USER_NAME,PASSWORD FROM USER WHERE id =:id";
 		var selectSQL = "SELECT USER_ID,NAME,PASSWORD FROM BPL_USERS WHERE user_id =:id";
+		console.log(id)
 		db.doConnect(function(err, connection){
 			if (err) {                  
 				return done(err,null);
@@ -26,6 +27,7 @@ module.exports = function(passport) {
 					} else {
 						//LOGGER.debug('GOT RESULT');
 						db.doRelease(connection);
+						
 						done(null,result.rows[0]);
 					}
 				});
@@ -95,11 +97,11 @@ module.exports = function(passport) {
         },
 			function(req, username, password, done) {
 				//console.log('local-login');
-				var selectSQL = "SELECT lower(USER_ID),NAME,PASSWORD,upper(ADMIN) FROM BPL_USERS WHERE user_id =:username1 ";
+				var selectSQL = "SELECT upper(USER_ID),NAME,PASSWORD,upper(ADMIN) FROM BPL_USERS WHERE user_id =:username1 ";
 				var param = [];
 				//console.log(db);
-				//param.push(username.toUpperCase());
-				param.push(username);
+				param.push(username.toUpperCase());
+				//param.push(username);
 				db.doConnect(function(err, connection){  
 					if (err) {
 						console.log('error connection');
@@ -125,7 +127,7 @@ module.exports = function(passport) {
 							}
 							
 							req.session.header_name = result.rows[0][1]
-							req.session.user_id = username
+							req.session.user_id = username.toUpperCase();
 							//console.log(result.rows[0])
 							req.session.admin = result.rows[0][3]
 							//console.log(req.session.admin)
