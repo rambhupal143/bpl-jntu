@@ -187,7 +187,7 @@ module.exports = function(app,passport) {
 							res.setHeader('X-Username', req.session.header_name);
 							req.flash('success', msg);
 							//return done(null, false, req.flash('successMessage', msg));
-							res.redirect('/options/predictions');
+							res.redirect('/options');
 						}
 					});
 				}
