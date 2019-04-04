@@ -18,7 +18,18 @@ including header content which is common for all pages
 		<th class="headcol"></th>
 		<% for(var i=1; i<57; i++) {%>
 			<th>M<%= i %></th>
-		<% } %>	
+		<% } %>
+			
+		<th class="headcol">Champion choice 1</th>
+		<th class="headcol">Champion choice 2</th>
+		<th class="headcol">Highest Sixes choice 1</th>
+		<th class="headcol">Highest Sixes choice 2</th>
+		<th class="headcol">Highest runs choice 1</th>
+		<th class="headcol">Highest runs choice 2</th>
+		<th class="headcol">Highest runs choice 3</th>
+		<th class="headcol">Highest wickets choice 1</th>
+		<th class="headcol">Highest wickets choice 2</th>
+		<th class="headcol">Highest wickets choice 3</th>
 	</tr>	
 	<% if (data) { %>
 	<% data.forEach(function(bpl_prediction){ %>
@@ -80,6 +91,16 @@ including header content which is common for all pages
 			<td><%= bpl_prediction.M54 %></td>
 			<td><%= bpl_prediction.M55 %></td>
 			<td><%= bpl_prediction.M56 %></td>
+			<td><%= bpl_prediction.B1 %></td>
+			<td><%= bpl_prediction.B2 %></td>
+			<td><%= bpl_prediction.B3 %></td>
+			<td><%= bpl_prediction.B4 %></td>
+			<td><%= bpl_prediction.B5 %></td>
+			<td><%= bpl_prediction.B6 %></td>
+			<td><%= bpl_prediction.B7 %></td>
+			<td><%= bpl_prediction.B8 %></td>
+			<td><%= bpl_prediction.B9 %></td>
+			<td><%= bpl_prediction.B10 %></td>
 		</tr>
 	<% }) %>
 	<% } %>
