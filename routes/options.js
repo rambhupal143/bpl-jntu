@@ -12,9 +12,13 @@ module.exports = function(app,passport) {
 	
 	// SHOW LIST OF MATCHES
 	app.get('/options', isLoggedIn, function(req, res, done) {
-		var selectSQL = "SELECT id, to_char(match_date,'DD-MON-YY hh:mm') as match_date,team1, team2,result, description, venue, freezed FROM bpl_matches " + 
-				"where result is null union all SELECT id, to_char(match_date,'DD-MON-YY hh:mm') as match_date,team1, team2,result, description, venue, freezed FROM " +
-				"bpl_matches where result is not null";
+		var userID = req.session.user_id;
+		var selectSQL = "select id, to_char(match_date,'DD-MON-YY hh:mm') as match_date,team1, team2,result, venue, to_char(last_updated_time,'DD-MON-YY hh:mm') " + 
+		" as last_updated_time, team_name,freezed from ( " + 
+		"select bm.*,bo.team_name,bo.last_updated_time from bpl_matches bm join bpl_options bo on bm.id = bo.match_id and bo.user_id = " + userID +
+		"union " + 
+		"select bm.*,null,null from bpl_matches bm where bm.id not in (select bm.id from bpl_matches bm join bpl_options bo on bm.id=bo.match_id and bo.user_id = "+ userID +") " +
+		") where result is null";
 		var param = [];
 		//console.log(req.session.user_id);
 		//param.push(anyVal);

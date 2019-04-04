@@ -15,20 +15,20 @@ including header content which is common for all pages
 
 <table width='60%' border=2 style="border-collapse: collapse;">
 	
-	<tr style='text-align:left; background-color:#92a8d1'; height=50px>
+	<tr style='text-align:left; background-color:#92a8d1';>
 		<th>Match No</th>
-		<th>Date</th>
-		<th>Description</th>
-		<th>Venue</th>
+		<th>Match Date</th>
+		<th>Venue</th>			
 		<th>Winner             <input type="submit" class="btn btn-success"/></th>
+		<th>My Choice</th>	
+		<th>Last Updated</th>
 	</tr>	
 	<% if (data) { %>
 	<% data.forEach(function(bpl_match){ %>
 		<tr>
 			<td><%= bpl_match.ID %></td>
 			<td><%= bpl_match.MATCH_DATE %></td>
-			<td><%= bpl_match.DESCRIPTION %></td>
-			<td><%= bpl_match.VENUE %></td>
+			<td><%= bpl_match.VENUE %></td>					
 			<%if (bpl_match.FREEZED != "Y") { %>
 				<td>			
 						<div class="form-group" id="gender">
@@ -42,6 +42,8 @@ including header content which is common for all pages
 			<!--<% if (admin == 'Y') { %>
 				<input type="submit" value="Admin" />
 			<% } %>-->
+			<td><%= bpl_match.TEAM_NAME %></td>	
+			<td><%= bpl_match.LAST_UPDATED_TIME %></td>
 		</tr>
 	<% }) %>
 	<% } %>
