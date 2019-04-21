@@ -15,51 +15,26 @@ including header content which is common for all pages
 <table width='40%' border=3 style="border-collapse: collapse;">
 
 	<tr style='text-align:left; background-color:#92a8d1'; height=50px>
-		<th class="headcol"></th>
-		<% for(var i=1; i<57; i++) {%>
+		<th class="headcol"> </th>
+		<% for(var i=26; i<57; i++) {%>
 			<th>M<%= i %></th>
 		<% } %>
 			
-		<th class="headcol">Champion choice 1</th>
-		<th class="headcol">Champion choice 2</th>
-		<th class="headcol">Highest Sixes choice 1</th>
-		<th class="headcol">Highest Sixes choice 2</th>
-		<th class="headcol">Highest runs choice 1</th>
-		<th class="headcol">Highest runs choice 2</th>
-		<th class="headcol">Highest runs choice 3</th>
-		<th class="headcol">Highest wickets choice 1</th>
-		<th class="headcol">Highest wickets choice 2</th>
-		<th class="headcol">Highest wickets choice 3</th>
+		<th >Champion choice 1</th>
+		<th >Champion choice 2</th>
+		<th >Highest Sixes choice 1</th>
+		<th >Highest Sixes choice 2</th>
+		<th >Highest runs choice 1</th>
+		<th >Highest runs choice 2</th>
+		<th >Highest runs choice 3</th>
+		<th >Highest wickets choice 1</th>
+		<th >Highest wickets choice 2</th>
+		<th >Highest wickets choice 3</th>
 	</tr>	
 	<% if (data) { %>
 	<% data.forEach(function(bpl_prediction){ %>
 		<tr>
 			<td class="headcol"><%= bpl_prediction.NAME %></td>
-			<td><%= bpl_prediction.M1 %></td>
-			<td><%= bpl_prediction.M2 %></td>
-			<td><%= bpl_prediction.M3 %></td>
-			<td><%= bpl_prediction.M4 %></td>
-			<td><%= bpl_prediction.M5 %></td>
-			<td><%= bpl_prediction.M6 %></td>
-			<td><%= bpl_prediction.M7 %></td>
-			<td><%= bpl_prediction.M8 %></td>
-			<td><%= bpl_prediction.M9 %></td>
-			<td><%= bpl_prediction.M10 %></td>
-			<td><%= bpl_prediction.M11 %></td>
-			<td><%= bpl_prediction.M12 %></td>
-			<td><%= bpl_prediction.M13 %></td>
-			<td><%= bpl_prediction.M14 %></td>
-			<td><%= bpl_prediction.M15 %></td>
-			<td><%= bpl_prediction.M16 %></td>
-			<td><%= bpl_prediction.M17 %></td>
-			<td><%= bpl_prediction.M18 %></td>
-			<td><%= bpl_prediction.M19 %></td>
-			<td><%= bpl_prediction.M20 %></td>
-			<td><%= bpl_prediction.M21 %></td>
-			<td><%= bpl_prediction.M22 %></td>
-			<td><%= bpl_prediction.M23 %></td>
-			<td><%= bpl_prediction.M24 %></td>
-			<td><%= bpl_prediction.M25 %></td>
 			<td><%= bpl_prediction.M26 %></td>
 			<td><%= bpl_prediction.M27 %></td>
 			<td><%= bpl_prediction.M28 %></td>

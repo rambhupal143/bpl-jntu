@@ -80,7 +80,7 @@ var log = log4js.getLogger("startup");
 
 var dbconfig = require("./config/dbconfig.js");
 
-process.env.UV_THREADPOOL_SIZE = 100;
+process.env.UV_THREADPOOL_SIZE = 1000;
 
 
 oracledb.createPool({
@@ -90,7 +90,7 @@ oracledb.createPool({
     poolMax:          1000,
     poolMin:          2,
     poolIncrement:    5,
-    poolTimeout:      4
+    poolTimeout:      10
 	//poolAlias: 'hrpool'
 }, function(err, pool) {
 
