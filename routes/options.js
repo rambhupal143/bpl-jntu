@@ -202,7 +202,7 @@ module.exports = function(app,passport) {
 		//var anyVal = '*';
 		var userID = req.session.user_id
 		var isAdmin = req.session.admin
-		var selectSQL = "SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW WHERE user_id != :userID union SELECT * FROM BPL_FINAL_PRED_SUMMARY_VW12 WHERE user_id = :userID";
+		var selectSQL = "SELECT * FROM MYPRED_VW WHERE user_id != :userID union SELECT * FROM MYPRED12_VW WHERE user_id = :userID";
 		var param = [];
 		//console.log(req.session.user_id);
 		param.push(userID);
@@ -303,7 +303,7 @@ module.exports = function(app,passport) {
 	app.get('/options/points', isLoggedIn, function(req, res, done) {
 		//var anyVal = '*';
 		var isAdmin = req.session.admin
-		var selectSQL = "SELECT * FROM BPL_FINAL_POINTS_SUMMARY_VW";
+		var selectSQL = "SELECT * FROM MYPOINTS_VW";
 		var param = [];		
 		//param.push(anyVal);
 		db.doConnect(function(err, connection){ 
